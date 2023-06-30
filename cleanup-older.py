@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import sys
@@ -45,7 +45,7 @@ class Cleanup_older:
 
         # Arguments passed validating
         if not self.validate_arguments():
-            print "\n%s\n" % (self.error_msg)
+            print("\n%s\n" % (self.error_msg))
             self.show_usage()
         else:
             self.crawl_directory(self.folder_path)
@@ -56,12 +56,12 @@ class Cleanup_older:
                 self.show_content()
 
             if self.skipped:
-                print "These has been skipped:"
+                print("These has been skipped:")
 
                 for f in self.skipped:
-                    print f
+                    print(f)
 
-                print "\n"
+                print("\n")
 
     def validate_arguments(self):
 
@@ -180,65 +180,65 @@ cleanup_older path/to/folder 2014-09-30 -r -e -s -d
 
             if file_to_delete == file_counter and path != self.folder_path:
                 self.folders.append(path)
-        except OSError, e:
+        except OSError as e:
             if e.errno == 13:
-                print "Can't access the specified folder, permission denied!"
+                print("Can't access the specified folder, permission denied!")
 
             sys.exit()
 
     def show_content(self):
         # Dump files list to be deleted
-        print "Files to be deleted\n"
+        print("Files to be deleted\n")
         for f in self.files:
-            print ' '.join(f)
+            print(' '.join(f))
 
         if self.delete_symbolic_link:
-            print "\nSymbolic links to be deleted\n"
+            print("\nSymbolic links to be deleted\n")
             for f in self.symbolic_links:
-                print ' '.join(f)
+                print(' '.join(f))
 
         if self.delete_empty_folder:
-            print "\nFolders to be deleted\n"
+            print("\nFolders to be deleted\n")
             for f in self.folders:
-                print f
+                print(f)
 
-        print "\n%d file(s) will be deleted" % (len(self.files))
+        print("\n%d file(s) will be deleted" % (len(self.files)))
 
         if self.delete_symbolic_link:
-            print "%d symbolic link(s) will be deleted" % (len(self.symbolic_links))
+            print("%d symbolic link(s) will be deleted" % (len(self.symbolic_links)))
 
         if self.delete_empty_folder:
-            print "%d folder(s) will be deleted" % (len(self.folders))
+            print("%d folder(s) will be deleted" % (len(self.folders)))
 
-        print "Approximately %0.1f MB will be recovered\n\n" % (float(self.recovered_space / 1048576.0))
+        print("Approximately %0.1f MB will be recovered\n\n" % (float(self.recovered_space / 1048576.0)))
 
     def delete_empty_folders(self):
         # Delete all empty folder
         total = 0
-        print "\n\nDeleting empty folders, please wait ...\n"
+        print("\n\nDeleting empty folders, please wait ...\n")
 
         for d in self.folders:
             try:
-                print "Deleting folder %s ..." % (d),
+                print("Deleting folder %s ..." % (d), end=' ')
                 os.rmdir(d)
                 total += 1
-                print "OK"
-            except OSError, e:
+                print("OK")
+            except OSError as e:
                 if e.errno == 66:
-                    print "folder not empty, can't delete"
+                    print("folder not empty, can't delete")
 
         return total
 
     def delete_symbolic_links(self):
         # Delete symbolic links
         total = 0
-        print "\n\nDeleting symbolic links, please wait ...\n"
+        print("\n\nDeleting symbolic links, please wait ...\n")
 
         for s in self.symbolic_links:
-            print "Deleting symbolic link %s ... " % (s[0]),
+            print("Deleting symbolic link %s ... " % (s[0]), end=' ')
             os.remove(s[0])
             total += 1
-            print "OK"
+            print("OK")
 
         return total
 
@@ -248,13 +248,13 @@ cleanup_older path/to/folder 2014-09-30 -r -e -s -d
         total_deleted_folders = 0
         total_deleted_symbolic_links = 0
 
-        print "Deleting files, please wait ...\n"
+        print("Deleting files, please wait ...\n")
 
         for f in self.files:
-            print "Deleting file %s ... " % (f[0]),
+            print("Deleting file %s ... " % (f[0]), end=' ')
             os.remove(f[0])
             total += 1
-            print "OK"
+            print("OK")
 
         # Deleting symbolic links
         if self.delete_symbolic_link:
@@ -264,6 +264,6 @@ cleanup_older path/to/folder 2014-09-30 -r -e -s -d
         if self.delete_empty_folder:
             total_deleted_folders = self.delete_empty_folders()
 
-        print "\n%s file(s), %s symbolic link(s) and %s folder(s) has been deleted\n\n" % (total, total_deleted_symbolic_links, total_deleted_folders)
+        print("\n%s file(s), %s symbolic link(s) and %s folder(s) has been deleted\n\n" % (total, total_deleted_symbolic_links, total_deleted_folders))
 
 Cleanup_older()
